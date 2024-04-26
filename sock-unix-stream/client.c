@@ -6,8 +6,6 @@
 #include "utils.h"
 
 int main(void) {
-	char* pathname = get_pathname();
-
 	char buf[80];
 	getcwd(buf, 80);
 
@@ -16,7 +14,7 @@ int main(void) {
 	struct sockaddr_un addr;
 
 	addr.sun_family = AF_UNIX;
-	strncpy(addr.sun_path, pathname, sizeof(addr.sun_path) - 1);
+	strncpy(addr.sun_path, SOCKET_PATH, sizeof(addr.sun_path) - 1);
 
 	int connect_res = connect(fd, (const struct sockaddr *) &addr, sizeof(addr));
 	perror("connect()");

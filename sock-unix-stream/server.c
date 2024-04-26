@@ -9,13 +9,11 @@
 #include "utils.h"
 
 void handle_SIGINT() {
-	char* pathname = get_pathname();
-	unlink(pathname);
+	unlink(SOCKET_PATH);
 	exit(0);
 }
 
 int main(void) {
-	char* pathname = get_pathname();
 	signal(SIGINT, handle_SIGINT);
 
 	char buf[80];
@@ -25,7 +23,7 @@ int main(void) {
 	struct sockaddr_un addr;
 
 	addr.sun_family = AF_UNIX;
-	strncpy(addr.sun_path, pathname, sizeof(addr.sun_path) - 1);
+	strncpy(addr.sun_path, SOCKET_PATH, sizeof(addr.sun_path) - 1);
 
 	int bind_res = bind(fd, (const struct sockaddr *) &addr, sizeof(addr));
 	perror("bind()");
@@ -58,7 +56,7 @@ int main(void) {
 		}
 	}
 	
-	unlink(pathname);
+	unlink(SOCKET_PATH);
 	close(fd);
 
 	return 0;
